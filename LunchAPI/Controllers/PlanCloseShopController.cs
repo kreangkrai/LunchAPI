@@ -41,7 +41,7 @@ namespace LunchAPI.Controllers
         }
 
         [HttpGet]
-        [Route("getplancloseshopsbydate")]
+        [Route("getplancloseshopsbydate/{now}")]
         public IActionResult GetPlanCloseShopsByDate(DateTime now)
         {
             try

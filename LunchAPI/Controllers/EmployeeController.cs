@@ -83,7 +83,7 @@ namespace LunchAPI.Controllers
         }
 
         [HttpGet]
-        [Route("getemployeesctl")]
+        [Route("getemployeectl")]
         public IActionResult GetEmployeeCTL()
         {
             try
