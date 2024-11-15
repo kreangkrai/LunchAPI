@@ -1,4 +1,4 @@
-# Lunch Of Reserve (LOR) API
+# Lunch Order Reserve (LOR) API
 
 ## คำอธิบาย
 เป็นระบบที่จัดการหลังบ้าน ติดต่อกับ Database ใช้สำหรับการเชื่อมต่อกับระบบจองอาหาร (Front-End)
