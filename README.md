@@ -10,3 +10,6 @@
 
 ## วิธีการติดตั้ง
 - Clone git https://github.com/kreangkrai/LunchAPI.git
+
+## ทีมพัฒนา
+- ทีม R&D Contrologic
