@@ -1,4 +1,5 @@
 # Lunch Order Reserve (LOR) API
+- Baseline version: Rev.1.0.0
 
 ## คำอธิบาย
 เป็นระบบที่จัดการหลังบ้าน ติดต่อกับ Database ใช้สำหรับการเชื่อมต่อกับระบบจองอาหาร (Front-End)
