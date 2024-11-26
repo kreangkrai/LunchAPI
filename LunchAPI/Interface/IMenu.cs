@@ -15,6 +15,7 @@ namespace LunchAPI.Interface
         string GetLastID();
         string Insert(MenuModel menu);
         string Update(MenuModel menu);
+        string UpdateStatus(MenuModel menu);
         string Delete(string menu_id);
     }
 }

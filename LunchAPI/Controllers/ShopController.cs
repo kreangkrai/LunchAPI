@@ -103,6 +103,27 @@ namespace LunchAPI.Controllers
             }
         }
 
+        [HttpPut]
+        [Route("updatestatus")]
+        public IActionResult UpdateStatus([FromBody] ShopModel shop)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    return Ok(Shop.UpdateStatus(shop));
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+
         [HttpDelete]
         [Route("delete/{shop_id}")]
         public IActionResult Delete(string shop_id)

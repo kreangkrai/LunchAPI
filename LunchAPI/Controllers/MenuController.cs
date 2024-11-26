@@ -166,6 +166,27 @@ namespace LunchAPI.Controllers
             }
         }
 
+        [HttpPut]
+        [Route("updatestatus")]
+        public IActionResult UpdateStatus([FromBody] MenuModel menu)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    return Ok(Menu.UpdateStatus(menu));
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+
         [HttpDelete]
         [Route("delete/{menu_id}")]
         public IActionResult Delete(string menu_id)

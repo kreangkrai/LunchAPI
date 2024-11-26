@@ -12,6 +12,7 @@ namespace LunchAPI.Interface
         string GetLastID();
         string Insert(ShopModel shop);
         string Update(ShopModel shop);
+        string UpdateStatus(ShopModel shop);
         string Delete(string shop_id);
         string UpdateCloseTimeShift(string shop_id);
     }

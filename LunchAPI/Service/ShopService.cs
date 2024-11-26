@@ -43,7 +43,6 @@ namespace LunchAPI.Service
             }
             return "Success";
         }
-
         public string GetLastID()
         {
             string shop_id = "S000";
@@ -68,7 +67,6 @@ namespace LunchAPI.Service
             }
             return shop_id;
         }
-
         public List<ShopModel> GetShops()
         {
             List<ShopModel> shops = new List<ShopModel>();
@@ -86,6 +84,7 @@ namespace LunchAPI.Service
                                                   ,[limit_order]
                                                   ,[limit_menu]
                                                   ,[delivery_service]
+                                                  ,[status_close]
                                                   ,[status]
                                               FROM [Lunch].[dbo].[Shop]");
                 SqlCommand command = new SqlCommand(strCmd, connection);
@@ -108,6 +107,7 @@ namespace LunchAPI.Service
                             limit_menu = dr["limit_menu"] != DBNull.Value ? Convert.ToInt32(dr["limit_menu"].ToString()) : 100,
                             delivery_service = dr["delivery_service"] != DBNull.Value ? Convert.ToInt32(dr["delivery_service"].ToString()) : 0,
                             status = dr["status"] != DBNull.Value ? Convert.ToBoolean(dr["status"].ToString()) : false,
+                            status_close = dr["status_close"] != DBNull.Value ? Convert.ToBoolean(dr["status_close"].ToString()) : false,
                         };
                         shops.Add(shop);
                     }
@@ -131,12 +131,14 @@ namespace LunchAPI.Service
                                          open_time,
                                          close_time,
                                          close_time_shift,
+                                         status_close,
                                          status)
                                         VALUES( @shop_id,
                                                 @shop_name,
                                                 @open_time,
                                                 @close_time,
                                                 @close_time_shift,
+                                                @status_close,
                                                 @status)");
                 using (SqlCommand cmd = new SqlCommand(string_command, ConnectSQL.OpenConnect()))
                 {
@@ -146,6 +148,7 @@ namespace LunchAPI.Service
                     cmd.Parameters.AddWithValue("@open_time", shop.open_time);
                     cmd.Parameters.AddWithValue("@close_time", shop.close_time);
                     cmd.Parameters.AddWithValue("@close_time_shift", shop.close_time_shift);
+                    cmd.Parameters.AddWithValue("@status_close", shop.status_close);
                     cmd.Parameters.AddWithValue("@status", shop.status);
                     if (ConnectSQL.con.State != System.Data.ConnectionState.Open)
                     {
@@ -184,7 +187,7 @@ namespace LunchAPI.Service
                                     limit_menu = @limit_menu,
                                     limit_order = @limit_order,
                                     delivery_service = @delivery_service,
-                                    status = @status
+                                    status_close = @status_close
                      WHERE shop_id = @shop_id");
                 using (SqlCommand cmd = new SqlCommand(string_command, ConnectSQL.OpenConnect()))
                 {
@@ -200,7 +203,7 @@ namespace LunchAPI.Service
                     cmd.Parameters.AddWithValue("@limit_menu", shop.limit_menu);
                     cmd.Parameters.AddWithValue("@limit_order", shop.limit_order);
                     cmd.Parameters.AddWithValue("@delivery_service", shop.delivery_service);
-                    cmd.Parameters.AddWithValue("@status", shop.status);
+                    cmd.Parameters.AddWithValue("@status_close", shop.status_close);
                     if (ConnectSQL.con.State != System.Data.ConnectionState.Open)
                     {
                         ConnectSQL.CloseConnect();
@@ -271,6 +274,39 @@ namespace LunchAPI.Service
                 {
                     cmd.CommandType = System.Data.CommandType.Text;
                     cmd.Parameters.AddWithValue("@shop_id", shop_id);
+                    if (ConnectSQL.con.State != System.Data.ConnectionState.Open)
+                    {
+                        ConnectSQL.CloseConnect();
+                        ConnectSQL.OpenConnect();
+                    }
+                    cmd.ExecuteNonQuery();
+                }
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+            finally
+            {
+                if (ConnectSQL.con.State == System.Data.ConnectionState.Open)
+                {
+                    ConnectSQL.CloseConnect();
+                }
+            }
+            return "Success";
+        }
+
+        public string UpdateStatus(ShopModel shop)
+        {
+            try
+            {
+                string string_command = string.Format($@"
+                    Update Shop SET status = @status where shop_id = @shop_id");
+                using (SqlCommand cmd = new SqlCommand(string_command, ConnectSQL.OpenConnect()))
+                {
+                    cmd.CommandType = System.Data.CommandType.Text;
+                    cmd.Parameters.AddWithValue("@shop_id", shop.shop_id);
+                    cmd.Parameters.AddWithValue("@status", shop.status);
                     if (ConnectSQL.con.State != System.Data.ConnectionState.Open)
                     {
                         ConnectSQL.CloseConnect();

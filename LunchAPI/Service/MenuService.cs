@@ -40,7 +40,6 @@ namespace LunchAPI.Service
             }
             return "Success";
         }
-
         public string GetLastID()
         {
             string menu_id = "M000";
@@ -65,7 +64,6 @@ namespace LunchAPI.Service
             }
             return menu_id;
         }
-
         public MenuModel GetMenuByMenu(string menu_id)
         {
             MenuModel menu = new MenuModel();
@@ -84,7 +82,8 @@ namespace LunchAPI.Service
 												  Menu.category_id,
 												  CategoryMenu.category_name,
 												  Menu.ingredients_id,
-												  IngredientsMenu.ingredients_name
+												  IngredientsMenu.ingredients_name,
+                                                  Menu.status
                                               FROM [Lunch].[dbo].[Menu]
                                               LEFT JOIN GroupMenu ON GroupMenu.group_id = Menu.group_id
                                               LEFT JOIN Shop ON Shop.shop_id = Menu.shop_id
@@ -111,7 +110,8 @@ namespace LunchAPI.Service
                             category_id = dr["category_id"].ToString(),
                             category_name = dr["category_name"].ToString(),
                             ingredients_id = dr["ingredients_id"].ToString(),
-                            ingredients_name = dr["ingredients_name"].ToString()
+                            ingredients_name = dr["ingredients_name"].ToString(),
+                            status = Convert.ToBoolean(dr["status"].ToString())
                         };                       
                     }
                     dr.Close();
@@ -123,7 +123,6 @@ namespace LunchAPI.Service
             }
             return menu;
         }
-
         public List<MenuModel> GetMenuByShop(string shop_id)
         {
             List<MenuModel> menus = new List<MenuModel>();
@@ -142,7 +141,8 @@ namespace LunchAPI.Service
 												  Menu.category_id,
 												  CategoryMenu.category_name,
 												  Menu.ingredients_id,
-												  IngredientsMenu.ingredients_name
+												  IngredientsMenu.ingredients_name,
+                                                  Menu.status
                                               FROM [Lunch].[dbo].[Menu]
                                               LEFT JOIN GroupMenu ON GroupMenu.group_id = Menu.group_id
                                               LEFT JOIN Shop ON Shop.shop_id = Menu.shop_id
@@ -169,7 +169,8 @@ namespace LunchAPI.Service
                             category_id = dr["category_id"].ToString(),
                             category_name = dr["category_name"].ToString(),
                             ingredients_id = dr["ingredients_id"].ToString(),
-                            ingredients_name = dr["ingredients_name"].ToString()
+                            ingredients_name = dr["ingredients_name"].ToString(),
+                            status = Convert.ToBoolean(dr["status"].ToString())
                         };
                         menus.Add(menu);
                     }
@@ -182,7 +183,6 @@ namespace LunchAPI.Service
             }
             return menus;
         }
-
         public List<MenuModel> GetMenus()
         {
             List<MenuModel> menus = new List<MenuModel>();
@@ -201,7 +201,8 @@ namespace LunchAPI.Service
 												  Menu.category_id,
 												  CategoryMenu.category_name,
 												  Menu.ingredients_id,
-												  IngredientsMenu.ingredients_name
+												  IngredientsMenu.ingredients_name,
+                                                  Menu.status
                                               FROM [Lunch].[dbo].[Menu]
                                               LEFT JOIN GroupMenu ON GroupMenu.group_id = Menu.group_id
                                               LEFT JOIN Shop ON Shop.shop_id = Menu.shop_id
@@ -227,7 +228,8 @@ namespace LunchAPI.Service
                             category_id = dr["category_id"].ToString(),
                             category_name = dr["category_name"].ToString(),
                             ingredients_id = dr["ingredients_id"].ToString(),
-                            ingredients_name = dr["ingredients_name"].ToString()
+                            ingredients_name = dr["ingredients_name"].ToString(),
+                            status = Convert.ToBoolean(dr["status"].ToString())
                         };
                         menus.Add(menu);
                     }
@@ -240,7 +242,6 @@ namespace LunchAPI.Service
             }
             return menus;
         }
-
         public string Insert(MenuModel menu)
         {
             try
@@ -254,7 +255,8 @@ namespace LunchAPI.Service
                                          menu_name,
                                          price,
                                          menu_pic,
-                                         extra_price)
+                                         extra_price,
+                                         status)
                                         VALUES( @menu_id,
                                                 @group_id,
                                                 @shop_id,
@@ -263,7 +265,8 @@ namespace LunchAPI.Service
                                                 @menu_name,
                                                 @price,
                                                 @menu_pic,
-                                                @extra_price)");
+                                                @extra_price,
+                                                @status)");
                 using (SqlCommand cmd = new SqlCommand(string_command, ConnectSQL.OpenConnect()))
                 {
                     cmd.CommandType = System.Data.CommandType.Text;
@@ -275,7 +278,8 @@ namespace LunchAPI.Service
                     cmd.Parameters.AddWithValue("@menu_name", menu.menu_name);
                     cmd.Parameters.AddWithValue("@price", menu.price);
                     cmd.Parameters.AddWithValue("@menu_pic", menu.menu_pic);
-                    cmd.Parameters.AddWithValue("@extra_price", menu.extra_price); 
+                    cmd.Parameters.AddWithValue("@extra_price", menu.extra_price);
+                    cmd.Parameters.AddWithValue("@status", menu.status);
                     if (ConnectSQL.con.State != System.Data.ConnectionState.Open)
                     {
                         ConnectSQL.CloseConnect();
@@ -297,7 +301,6 @@ namespace LunchAPI.Service
             }
             return "Success";
         }
-
         public List<MenuModel> SearchMenuByShop(string shop_id, string menu)
         {
             List<MenuModel> menus = new List<MenuModel>();
@@ -316,7 +319,8 @@ namespace LunchAPI.Service
 												  Menu.category_id,
 												  CategoryMenu.category_name,
 												  Menu.ingredients_id,
-												  IngredientsMenu.ingredients_name
+												  IngredientsMenu.ingredients_name,
+                                                  Menu.status
                                               FROM [Lunch].[dbo].[Menu]
                                               LEFT JOIN GroupMenu ON GroupMenu.group_id = Menu.group_id
                                               LEFT JOIN Shop ON Shop.shop_id = Menu.shop_id
@@ -343,7 +347,8 @@ namespace LunchAPI.Service
                             category_id = dr["category_id"].ToString(),
                             category_name = dr["category_name"].ToString(),
                             ingredients_id = dr["ingredients_id"].ToString(),
-                            ingredients_name = dr["ingredients_name"].ToString()
+                            ingredients_name = dr["ingredients_name"].ToString(),
+                            status = Convert.ToBoolean(dr["status"].ToString())
                         };
                         menus.Add(_menu);
                     }
@@ -356,7 +361,6 @@ namespace LunchAPI.Service
             }
             return menus;
         }
-
         public string Update(MenuModel menu)
         {
             try
@@ -373,6 +377,39 @@ namespace LunchAPI.Service
                     cmd.Parameters.AddWithValue("@menu_name", menu.menu_name);
                     cmd.Parameters.AddWithValue("@price", menu.price);
                     cmd.Parameters.AddWithValue("@extra_price", menu.extra_price);
+                    if (ConnectSQL.con.State != System.Data.ConnectionState.Open)
+                    {
+                        ConnectSQL.CloseConnect();
+                        ConnectSQL.OpenConnect();
+                    }
+                    cmd.ExecuteNonQuery();
+                }
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+            finally
+            {
+                if (ConnectSQL.con.State == System.Data.ConnectionState.Open)
+                {
+                    ConnectSQL.CloseConnect();
+                }
+            }
+            return "Success";
+        }
+        public string UpdateStatus(MenuModel menu)
+        {
+            try
+            {
+                string string_command = string.Format($@"
+                    UPDATE Menu SET status = @status                                  
+                                    WHERE menu_id = @menu_id");
+                using (SqlCommand cmd = new SqlCommand(string_command, ConnectSQL.OpenConnect()))
+                {
+                    cmd.CommandType = System.Data.CommandType.Text;
+                    cmd.Parameters.AddWithValue("@menu_id", menu.menu_id);
+                    cmd.Parameters.AddWithValue("@status", menu.status);
                     if (ConnectSQL.con.State != System.Data.ConnectionState.Open)
                     {
                         ConnectSQL.CloseConnect();
