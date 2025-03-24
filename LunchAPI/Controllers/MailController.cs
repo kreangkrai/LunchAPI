@@ -1,6 +1,5 @@
 ﻿using LunchAPI.Interface;
 using LunchAPI.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -11,23 +10,23 @@ namespace LunchAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class EmployeeController : Controller
+    public class MailController : Controller
     {
-        private IEmployee Employee;
-        public EmployeeController(IEmployee _Employee)
+        private IMail Mail;
+        public MailController(IMail _Mail)
         {
-            Employee = _Employee;
+            Mail = _Mail;
         }
 
         [HttpGet]
-        [Route("getemployees")]
-        public IActionResult GetEmployees()
+        [Route("gets")]
+        public IActionResult SendEmailTransfer()
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    return Ok(Employee.GetEmployees());
+                    return Ok(Mail.GetEmailAddress());
                 }
                 else
                 {
@@ -39,80 +38,16 @@ namespace LunchAPI.Controllers
                 return BadRequest();
             }
         }
-
-        [HttpGet]
-        [Route("getuserad")]
-        public IActionResult GetUserAD()
-        {
-            try
-            {
-                if (ModelState.IsValid)
-                {
-                    return Ok(Employee.GetUserAD());
-                }
-                else
-                {
-                    return BadRequest();
-                }
-            }
-            catch
-            {
-                return BadRequest();
-            }
-        }
-
-        [HttpGet]
-        [Route("getlastemployee")]
-        public IActionResult GetLastEmployee()
-        {
-            try
-            {
-                if (ModelState.IsValid)
-                {
-                    return Ok(Employee.GetLastEmployee());
-                }
-                else
-                {
-                    return BadRequest();
-                }
-            }
-            catch
-            {
-                return BadRequest();
-            }
-        }
-
-        [HttpGet]
-        [Route("getemployeectl")]
-        public IActionResult GetEmployeeCTL()
-        {
-            try
-            {
-                if (ModelState.IsValid)
-                {
-                    return Ok(Employee.GetEmployeeCTL());
-                }
-                else
-                {
-                    return BadRequest();
-                }
-            }
-            catch
-            {
-                return BadRequest();
-            }
-        }
-
 
         [HttpPost]
-        [Route("insert")]
-        public IActionResult Insert([FromBody] EmployeeModel employee)
+        [Route("transfer")]
+        public IActionResult SendEmailTransfer([FromBody] MailDataModel data)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    return Ok(Employee.Insert(employee));
+                    return Ok(Mail.SendEmailTransfer(data.transfer, data.receiver, data.amount, data.balance, data.date));
                 }
                 else
                 {
@@ -125,15 +60,15 @@ namespace LunchAPI.Controllers
             }
         }
 
-        [HttpPut]
-        [Route("updaterole")]
-        public IActionResult UpdateRole([FromBody] EmployeeModel employee)
+        [HttpPost]
+        [Route("receiver")]
+        public IActionResult SendEmailReceiver([FromBody] MailDataModel data)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    return Ok(Employee.UpdateRole(employee));
+                    return Ok(Mail.SendEmailReceiver(data.transfer, data.receiver, data.amount, data.balance, data.date));
                 }
                 else
                 {
@@ -146,15 +81,15 @@ namespace LunchAPI.Controllers
             }
         }
 
-        [HttpPut]
-        [Route("updatebalance")]
-        public IActionResult UpdateBalance([FromBody] EmployeeModel employee)
+        [HttpPost]
+        [Route("admintopup")]
+        public IActionResult SendEmailAdminTopup([FromBody] MailDataModel data)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    return Ok(Employee.UpdateBalance(employee));
+                    return Ok(Mail.SendEmailAdminTopup(data.admin, data.topup, data.amount, data.url, data.date));
                 }
                 else
                 {
@@ -167,15 +102,15 @@ namespace LunchAPI.Controllers
             }
         }
 
-        [HttpPut]
-        [Route("updatestatus")]
-        public IActionResult UpdateStatus([FromBody] EmployeeModel employee)
+        [HttpPost]
+        [Route("topup")]
+        public IActionResult SendEmailTopup([FromBody] MailDataModel data)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    return Ok(Employee.UpdateStatus(employee));
+                    return Ok(Mail.SendEmailTopup(data.topup, data.amount, data.date));
                 }
                 else
                 {
@@ -187,15 +122,58 @@ namespace LunchAPI.Controllers
                 return BadRequest();
             }
         }
-        [HttpPut]
-        [Route("updatenotify")]
-        public IActionResult UpdateNotify([FromBody] EmployeeModel employee)
+
+        [HttpPost]
+        [Route("approvetopup")]
+        public IActionResult SendEmailApproveTopup([FromBody] MailDataModel data)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    return Ok(Employee.UpdateNotify(employee));
+                    return Ok(Mail.SendEmailApproveTopup(data.topup, data.amount, data.date));
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpPost]
+        [Route("canceltopup")]
+        public IActionResult SendEmailCancelTopup([FromBody] MailDataModel data)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    return Ok(Mail.SendEmailCancelTopup(data.topup, data.amount, data.date));
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpPost]
+        [Route("pay")]
+        public IActionResult SendEmailPay([FromBody] MailDataModel data)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    return Ok(Mail.SendEmailPay(data.payer, data.amount, data.balance, data.date));
                 }
                 else
                 {

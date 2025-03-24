@@ -22,7 +22,9 @@ namespace LunchAPI.Service
 	                                                department,
 	                                                balance,
 	                                                role,
-                                                    status
+                                                    status,
+                                                    notify,
+                                                    email
                                                  FROM Employee");
                 SqlCommand command = new SqlCommand(strCmd, connection);
                 SqlDataReader dr = command.ExecuteReader();
@@ -38,7 +40,9 @@ namespace LunchAPI.Service
                             department = dr["department"].ToString(),
                             role = dr["role"].ToString(),
                             balance = dr["balance"] != DBNull.Value ? Convert.ToInt32(dr["balance"].ToString()) : 0,
-                            status = dr["status"] != DBNull.Value ? Convert.ToBoolean(dr["status"].ToString()) : false
+                            status = dr["status"] != DBNull.Value ? Convert.ToBoolean(dr["status"].ToString()) : false,
+                            notify = dr["notify"] != DBNull.Value ? Convert.ToBoolean(dr["notify"].ToString()) : false,
+                            email = dr["email"].ToString()
                         };
                         employees.Add(employee);
                     }
@@ -81,7 +85,6 @@ namespace LunchAPI.Service
             }
             return users;
         }
-
         public string GetLastEmployee()
         {
             string employee = "EM000";
@@ -109,14 +112,13 @@ namespace LunchAPI.Service
             }
             return employee;
         }
-
         public string Insert(EmployeeModel employee)
         {
             try
             {
                 string string_command = string.Format($@"
-                    INSERT INTO Employee(employee_id,employee_name,employee_nickname,department,balance,role,status)
-                    VALUES (@employee_id,@employee_name,@employee_nickname,@department,@balance,@role,@status)");
+                    INSERT INTO Employee(employee_id,employee_name,employee_nickname,department,balance,role,status,notify,email)
+                    VALUES (@employee_id,@employee_name,@employee_nickname,@department,@balance,@role,@status,@notify,@email)");
                 using (SqlCommand cmd = new SqlCommand(string_command, ConnectSQL.OpenConnect()))
                 {
                     cmd.CommandType = System.Data.CommandType.Text;
@@ -127,6 +129,8 @@ namespace LunchAPI.Service
                     cmd.Parameters.AddWithValue("@balance", employee.balance);
                     cmd.Parameters.AddWithValue("@role", employee.role);
                     cmd.Parameters.AddWithValue("@status", employee.status);
+                    cmd.Parameters.AddWithValue("@notify", employee.notify);
+                    cmd.Parameters.AddWithValue("@email", employee.email);
                     if (ConnectSQL.con.State != System.Data.ConnectionState.Open)
                     {
                         ConnectSQL.CloseConnect();
@@ -148,7 +152,6 @@ namespace LunchAPI.Service
             }
             return "Success";
         }
-
         public string UpdateBalance(EmployeeModel employee)
         {
             try
@@ -182,7 +185,6 @@ namespace LunchAPI.Service
             }
             return "Success";
         }
-
         public string UpdateRole(EmployeeModel employee)
         {
             try
@@ -218,7 +220,6 @@ namespace LunchAPI.Service
             }
             return "Success";
         }
-
         public EmployeeModel GetEmployeeCTL()
         {
             EmployeeModel employee = new EmployeeModel();
@@ -231,7 +232,9 @@ namespace LunchAPI.Service
 	                                                department,
 	                                                balance,
 	                                                role,
-                                                    status
+                                                    status,
+                                                    notify,
+                                                    email
                                                  FROM Employee
                                                  WHERE employee_id = 'EM999'");
                 SqlCommand command = new SqlCommand(strCmd, connection);
@@ -248,7 +251,9 @@ namespace LunchAPI.Service
                             department = dr["department"].ToString(),
                             role = dr["role"].ToString(),
                             balance = dr["balance"] != DBNull.Value ? Convert.ToInt32(dr["balance"].ToString()) : 0,
-                            status = dr["status"] != DBNull.Value ? Convert.ToBoolean(dr["status"].ToString()) : false
+                            status = dr["status"] != DBNull.Value ? Convert.ToBoolean(dr["status"].ToString()) : false,
+                            notify = dr["notify"] != DBNull.Value ? Convert.ToBoolean(dr["notify"].ToString()) : false,
+                            email = dr["email"].ToString()
                         };
                     }
                     dr.Close();
@@ -260,7 +265,6 @@ namespace LunchAPI.Service
             }
             return employee;
         }
-
         public string UpdateStatus(EmployeeModel employee)
         {
             try
@@ -273,6 +277,40 @@ namespace LunchAPI.Service
                     cmd.CommandType = System.Data.CommandType.Text;
                     cmd.Parameters.AddWithValue("@employee_id", employee.employee_id);
                     cmd.Parameters.AddWithValue("@status", employee.status);
+                    if (ConnectSQL.con.State != System.Data.ConnectionState.Open)
+                    {
+                        ConnectSQL.CloseConnect();
+                        ConnectSQL.OpenConnect();
+                    }
+                    cmd.ExecuteNonQuery();
+                }
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+            finally
+            {
+                if (ConnectSQL.con.State == System.Data.ConnectionState.Open)
+                {
+                    ConnectSQL.CloseConnect();
+                }
+            }
+            return "Success";
+        }
+
+        public string UpdateNotify(EmployeeModel employee)
+        {
+            try
+            {
+                string string_command = string.Format($@"
+                    UPDATE Employee SET notify = @notify
+                                        WHERE employee_id = @employee_id");
+                using (SqlCommand cmd = new SqlCommand(string_command, ConnectSQL.OpenConnect()))
+                {
+                    cmd.CommandType = System.Data.CommandType.Text;
+                    cmd.Parameters.AddWithValue("@employee_id", employee.employee_id);
+                    cmd.Parameters.AddWithValue("@notify", employee.notify);
                     if (ConnectSQL.con.State != System.Data.ConnectionState.Open)
                     {
                         ConnectSQL.CloseConnect();

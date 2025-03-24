@@ -10,6 +10,55 @@ namespace LunchAPI.Service
 {
     public class TransactionService : ITransaction
     {
+        public List<TransactionModel> GetCentralMoneyTransactions()
+        {
+            List<TransactionModel> transactions = new List<TransactionModel>();
+            SqlConnection connection = ConnectSQL.OpenConnect();
+            try
+            {
+                string strCmd = string.Format($@"SELECT [Transaction].id,
+		                                                [Transaction].employee_id,
+		                                                E1.employee_name,
+		                                                [Transaction].receiver_id,
+		                                                E2.employee_name as receiver_name,
+		                                                type,
+		                                                amount,
+		                                                date,
+		                                                note
+		                                        FROM [Transaction]
+                                                LEFT JOIN Employee E1 ON E1.employee_id = [Transaction].employee_id
+                                                LEFT JOIN Employee E2 ON E2.employee_id = [Transaction].receiver_id
+                                                WHERE [Transaction].employee_id = 'EM999'");
+                SqlCommand command = new SqlCommand(strCmd, connection);
+                SqlDataReader dr = command.ExecuteReader();
+                if (dr.HasRows)
+                {
+                    while (dr.Read())
+                    {
+                        TransactionModel transaction = new TransactionModel()
+                        {
+                            id = Convert.ToInt32(dr["id"].ToString()),
+                            employee_id = dr["employee_id"].ToString(),
+                            employee_name = dr["employee_name"].ToString(),
+                            receiver_id = dr["receiver_id"].ToString(),
+                            receiver_name = dr["receiver_name"].ToString(),
+                            type = dr["type"].ToString(),
+                            amount = dr["amount"] != DBNull.Value ? Convert.ToInt32(dr["amount"].ToString()) : 0,
+                            date = dr["date"] != DBNull.Value ? Convert.ToDateTime(dr["date"].ToString()) : DateTime.MinValue,
+                            note = dr["note"].ToString()
+                        };
+                        transactions.Add(transaction);
+                    }
+                    dr.Close();
+                }
+            }
+            finally
+            {
+                connection.Close();
+            }
+            return transactions;
+        }
+
         public List<TransactionModel> GetTransactionByDate(DateTime date)
         {
             List<TransactionModel> transactions = new List<TransactionModel>();

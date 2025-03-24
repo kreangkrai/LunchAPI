@@ -42,6 +42,7 @@ namespace LunchAPI
             services.AddScoped<IShop, ShopService>();
             services.AddScoped<ITopup, TopupService>();
             services.AddScoped<ITransaction, TransactionService>();
+            services.AddScoped<IMail, MailService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

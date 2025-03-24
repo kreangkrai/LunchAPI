@@ -15,6 +15,7 @@ namespace LunchAPI.Interface
         string UpdateRole(EmployeeModel employee);
         string UpdateBalance(EmployeeModel employee);
         string UpdateStatus(EmployeeModel employee);
+        string UpdateNotify(EmployeeModel employee);
         EmployeeModel GetEmployeeCTL();
     }
 }

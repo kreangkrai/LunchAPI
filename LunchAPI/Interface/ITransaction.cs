@@ -12,6 +12,7 @@ namespace LunchAPI.Interface
         List<TransactionModel> GetTransactionByEmployee(string employee_id);
         List<TransactionModel> GetTransactionByDate(DateTime date);
         List<TransactionModel> GetTransactionByMonth(string month);
+        List<TransactionModel> GetCentralMoneyTransactions();
         string Insert(TransactionModel transaction);
 
     }

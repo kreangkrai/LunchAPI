@@ -41,6 +41,28 @@ namespace LunchAPI.Controllers
         }
 
         [HttpGet]
+        [Route("getcentralmoneytransactions")]
+        public IActionResult GetCentralMoneyTransactions()
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    return Ok(Transaction.GetCentralMoneyTransactions());
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+
+
+        [HttpGet]
         [Route("gettransactionbyemployee/{employee_id}")]
         public IActionResult GetTransactionByEmployee(string employee_id)
         {
