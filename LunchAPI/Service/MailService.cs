@@ -51,14 +51,18 @@ namespace LunchAPI.Service
                 mail.From = new MailAddress(from);
                 mail.To.Add(transfer);
 
-                mail.Subject = "แจ้งเตือนระบบโอนเงินโปรแกรมจองข้าว";
+                mail.Subject = "แจ้งเตือนระบบโอนเงิน โปรแกรมจองข้าว";
                 string body = string.Format($@"
-                    <p style=""font-size:16px;""><b>แจ้งเตือนระบบโอนเงิน</b></p>
-                    <p>วันที่ทำรายการ : {date.ToString("dd/MM/yyyy HH:mm:ss")}</p>
-                    <p>เพื่อเข้าบัญชี   : {receiver}</p>
-                    <p>จำนวนเงิน    : {amount} บาท</p>
-                    <p>ยอดคงเหลือ   : {balance} บาท</p>
-                ");
+                    <p style=""font-size:36px;font-family:Cordia New""><b>แจ้งเตือนระบบโอนเงิน</b></p>
+                    <p style=""font-size:28px;font-family:Cordia New""><b>รายละเอียดการโอนเงิน</b></p>
+                    <p style=""font-size:22px;font-family:Cordia New"">วันที่ทำรายการ      : <b>{date.ToString("dd/MM/yyyy HH:mm:ss")}</b></p>
+                    <p style=""font-size:22px;font-family:Cordia New"">ผู้รับเงินโอน        : <b>{receiver.Split('@')[0]}</b></p>
+                    <p style=""font-size:22px;font-family:Cordia New"">จำนวนเงินที่โอน     : <b>{amount}</b> บาท</p>
+                    <p style=""font-size:24px;font-family:Cordia New"">ยอดคงเหลือในปัจจุบัน : <b>{balance}</b> บาท</p>
+                    <p style=""font-size:28px;font-family:Cordia New""><b><i>ขอบคุณที่ใช้บริการ</i></b></p>
+                    <p style=""font-size:28px;font-family:Cordia New""><b><i>Best Regards,</i></b></p>
+                    <p style=""font-size:28px;font-family:Cordia New""><b><i>Lunch Order Reserve (LOR)</i></b></p>
+                 ");
 
                 mail.IsBodyHtml = true;
                 mail.Body = body;
@@ -88,13 +92,17 @@ namespace LunchAPI.Service
                 mail.From = new MailAddress(from);
                 mail.To.Add(receiver);
 
-                mail.Subject = "แจ้งเตือนระบบรับเงินโปรแกรมจองข้าว";
+                mail.Subject = "แจ้งเตือนระบบรับเงิน โปรแกรมจองข้าว";
                 string body = string.Format($@"
-                    <p style=""font-size:16px;""><b>แจ้งเตือนระบบรับเงิน</b></p>
-                    <p>วันที่ทำรายการ : {date.ToString("dd/MM/yyyy HH:mm:ss")}</p>
-                    <p>จากบัญชี     : {transfer}</p>
-                    <p>จำนวนเงิน    : {amount} บาท</p>
-                    <p>ยอดคงเหลือ   : {balance} บาท</p>
+                    <p style=""font-size:36px;""><b>คุณได้รับเงินโอนเรียบร้อยแล้ว</b></p>
+                    <p style=""font-size:28px;font-family:Cordia New""><b>รายละเอียดการโอนเงิน</b></p>
+                    <p style=""font-size:22px;font-family:Cordia New"">วันที่ทำรายการ      : <b>{date.ToString("dd/MM/yyyy HH:mm:ss")}</b></p>
+                    <p style=""font-size:22px;font-family:Cordia New"">ผู้โอนเงิน        : <b>{transfer.Split('@')[0]}</b></p>
+                    <p style=""font-size:22px;font-family:Cordia New"">จำนวนเงินที่ได้รับ     : <b>{amount}</b> บาท</p>
+                    <p style=""font-size:24px;font-family:Cordia New"">ยอดคงเหลือในปัจจุบัน : <b>{balance}</b> บาท</p>
+                    <p style=""font-size:28px;font-family:Cordia New""><b><i>ขอบคุณที่ใช้บริการ</i></b></p>
+                    <p style=""font-size:28px;font-family:Cordia New""><b><i>Best Regards,</i></b></p>
+                    <p style=""font-size:28px;font-family:Cordia New""><b><i>Lunch Order Reserve (LOR)</i></b></p>
                 ");
 
                 mail.IsBodyHtml = true;
@@ -135,13 +143,16 @@ namespace LunchAPI.Service
                 }
                 Attachment item = new Attachment(imagePath);
                 mail.Attachments.Add(item);
-                mail.Subject = "แจ้งเตือนระบบเติมเงินโปรแกรมจองข้าว";
+                mail.Subject = "แจ้งเตือนระบบเติมเงิน โปรแกรมจองข้าว";
                 string body = string.Format($@"
-                    <p style=""font-size:16px;""><b>แจ้งเตือนระบบเติมเงิน</b></p>
-                    <p>วันที่ทำรายการ : {date.ToString("dd/MM/yyyy HH:mm:ss")}</p>
-                    <p>จากบัญชี     : {topup}</p>
-                    <p>จำนวนเงิน    : {amount} บาท</p>
-                    <p>สถานะ      : รออนุมัติ</p>
+                    <p style=""font-size:36px;""><b>มีผู้ทำรายการเติมเงิน</b></p>
+                    <p style=""font-size:28px;font-family:Cordia New""><b>รายละเอียดการเติมเงิน</b></p>
+                    <p style=""font-size:22px;font-family:Cordia New"">วันที่ทำรายการ     : <b>{date.ToString("dd/MM/yyyy HH:mm:ss")}</b></p>
+                    <p style=""font-size:22px;font-family:Cordia New"">ผู้ทำรายการเติมเงิน  : <b>{topup.Split('@')[0]}</b></p>
+                    <p style=""font-size:22px;font-family:Cordia New"">จำนวนเงิน        : <b>{amount}</b> บาท</p>
+                    <p style=""font-size:28px;font-family:Cordia New""><b><i>ขอบคุณที่ใช้บริการ</i></b></p>
+                    <p style=""font-size:28px;font-family:Cordia New""><b><i>Best Regards,</i></b></p>
+                    <p style=""font-size:28px;font-family:Cordia New""><b><i>Lunch Order Reserve (LOR)</i></b></p>
                 ");
 
                 mail.IsBodyHtml = true;
@@ -172,11 +183,16 @@ namespace LunchAPI.Service
                 mail.From = new MailAddress(from);
                 mail.To.Add(topup);
 
-                mail.Subject = "แจ้งเตือนระบบเติมเงินโปรแกรมจองข้าว";
+                mail.Subject = "แจ้งเตือนระบบเติมเงิน โปรแกรมจองข้าว";
                 string body = string.Format($@"
-                    <p style=""font-size:16px;""><b>แจ้งเตือนระบบเติมเงิน</b></p>
-                    <p>วันที่ทำรายการ : {date.ToString("dd/MM/yyyy HH:mm:ss")}</p>
-                    <p>จำนวนเงิน    : {amount} บาท</p>
+                    <p style=""font-size:36px;""><b>ทำรายการเติมเงินเรียบร้อยแล้ว กรุณารอแอดมินดำเนินการ</b></p>
+                    <p style=""font-size:28px;font-family:Cordia New""><b>รายละเอียดการเติมเงิน</b></p>
+                    <p style=""font-size:22px;font-family:Cordia New"">วันที่ทำรายการ     : <b>{date.ToString("dd/MM/yyyy HH:mm:ss")}</b></p>
+                    <p style=""font-size:22px;font-family:Cordia New"">จำนวนเงิน        : <b>{amount}</b> บาท</p>
+                    <p style=""font-size:22px;font-family:Cordia New"">สถานะ           : <b>รอดำเนินการ</b></p>
+                    <p style=""font-size:28px;font-family:Cordia New""><b><i>ขอบคุณที่ใช้บริการ</i></b></p>
+                    <p style=""font-size:28px;font-family:Cordia New""><b><i>Best Regards,</i></b></p>
+                    <p style=""font-size:28px;font-family:Cordia New""><b><i>Lunch Order Reserve (LOR)</i></b></p>
                 ");
 
                 mail.IsBodyHtml = true;
@@ -195,7 +211,7 @@ namespace LunchAPI.Service
             }
             return "Success";
         }
-        public string SendEmailApproveTopup(string topup, int amount, DateTime date)
+        public string SendEmailApproveTopup(string topup, int amount,int balance, DateTime date)
         {
             try
             {
@@ -207,12 +223,17 @@ namespace LunchAPI.Service
                 mail.From = new MailAddress(from);
                 mail.To.Add(topup);
 
-                mail.Subject = "แจ้งเตือนระบบเติมเงินโปรแกรมจองข้าว";
+                mail.Subject = "แจ้งเตือนระบบเติมเงิน โปรแกรมจองข้าว";
                 string body = string.Format($@"
-                    <p style=""font-size:16px;""><b>แจ้งเตือนระบบเติมเงิน</b></p>
-                    <p>วันที่ทำรายการ : {date.ToString("dd/MM/yyyy HH:mm:ss")}</p>
-                    <p>จำนวนเงิน    : {amount} บาท</p>
-                    <p>สถานะ      : อนุมัติแล้ว</p>
+                    <p style=""font-size:36px;color:blue""><b>การเติมเงินเข้าบัญชีคุณสำเร็จแล้ว</b></p>
+                    <p style=""font-size:28px;font-family:Cordia New""><b>รายละเอียดการเติมเงิน</b></p>
+                    <p style=""font-size:22px;font-family:Cordia New"">วันที่ทำรายการ        : <b>{date.ToString("dd/MM/yyyy HH:mm:ss")}</b></p>
+                    <p style=""font-size:22px;font-family:Cordia New"">จำนวนเงิน           : <b>{amount}</b> บาท</p>
+                    <p style=""font-size:22px;font-family:Cordia New"">สถานะ              : <b>สำเร็จ</b></p>
+                    <p style=""font-size:22px;font-family:Cordia New"">ยอดเงินคงเหลือในปัจจุบัน : <b>{balance}</b> บาท</p>
+                    <p style=""font-size:28px;font-family:Cordia New""><b><i>ขอบคุณที่ใช้บริการ</i></b></p>
+                    <p style=""font-size:28px;font-family:Cordia New""><b><i>Best Regards,</i></b></p>
+                    <p style=""font-size:28px;font-family:Cordia New""><b><i>Lunch Order Reserve (LOR)</i></b></p>
                 ");
 
                 mail.IsBodyHtml = true;
@@ -243,12 +264,17 @@ namespace LunchAPI.Service
                 mail.From = new MailAddress(from);
                 mail.To.Add(topup);
 
-                mail.Subject = "แจ้งเตือนระบบเติมเงินโปรแกรมจองข้าว";
+                mail.Subject = "แจ้งเตือนระบบเติมเงิน โปรแกรมจองข้าว";
                 string body = string.Format($@"
-                    <p style=""font-size:16px;""><b>แจ้งเตือนระบบเติมเงิน</b></p>
-                    <p>วันที่ทำรายการ : {date.ToString("dd/MM/yyyy HH:mm:ss")}</p>
-                    <p>จำนวนเงิน    : {amount} บาท</p>
-                    <p>สถานะ      : ไม่อนุมัติ</p>
+                    <p style=""font-size:36px;color:red""><b>การเติมเงินเข้าบัญชีคุณไม่สำเร็จ</b></p>
+                    <p style=""font-size:28px;font-family:Cordia New""><b>รายละเอียดการเติมเงิน</b></p>
+                    <p style=""font-size:22px;font-family:Cordia New"">วันที่ทำรายการ        : <b>{date.ToString("dd/MM/yyyy HH:mm:ss")}</b></p>
+                    <p style=""font-size:22px;font-family:Cordia New"">จำนวนเงิน           : <b>{amount}</b> บาท</p>
+                    <p style=""font-size:22px;font-family:Cordia New"">สถานะ              : <b>ถูกยกเลิก</b></p>
+                    <p style=""font-size:24px;font-family:Cordia New""><b>กรุณาทำรายการใหม่อีกครั้ง</b></p>
+                    <p style=""font-size:28px;font-family:Cordia New""><b><i>ขอบคุณที่ใช้บริการ</i></b></p>
+                    <p style=""font-size:28px;font-family:Cordia New""><b><i>Best Regards,</i></b></p>
+                    <p style=""font-size:28px;font-family:Cordia New""><b><i>Lunch Order Reserve (LOR)</i></b></p>
                 ");
 
                 mail.IsBodyHtml = true;
@@ -279,12 +305,16 @@ namespace LunchAPI.Service
                 mail.From = new MailAddress(from);
                 mail.To.Add(payer);
 
-                mail.Subject = "แจ้งเตือนระบบจ่ายเงินโปรแกรมจองข้าว";
+                mail.Subject = "แจ้งเตือนระบบจ่ายเงิน โปรแกรมจองข้าว";
                 string body = string.Format($@"
-                    <p style=""font-size:16px;""><b>แจ้งเตือนระบบจ่ายเงิน</b></p>
-                    <p>วันที่ทำรายการ : {date.ToString("dd/MM/yyyy HH:mm:ss")}</p>
-                    <p>จำนวนเงิน    : {amount} บาท</p>
-                    <p>ยอดคงเหลือ   : {balance} บาท</p>
+                    <p style=""font-size:36px;color:blue""><b>การสั่งอาหารของคุณสำเร็จแล้ว</b></p>
+                    <p style=""font-size:28px;font-family:Cordia New""><b>รายละเอียดการสั่งอาหาร</b></p>
+                    <p style=""font-size:22px;font-family:Cordia New"">วันที่ทำรายการ        : <b>{date.ToString("dd/MM/yyyy HH:mm:ss")}</b></p>
+                    <p style=""font-size:22px;font-family:Cordia New"">จำนวนเงิน           : <b>{amount}</b> บาท</p>
+                    <p style=""font-size:24px;font-family:Cordia New"">ยอดคงเหลือในปัจจุบัน   : <b>{balance}</b> บาท</p>
+                    <p style=""font-size:28px;font-family:Cordia New""><b><i>ขอบคุณที่ใช้บริการ</i></b></p>
+                    <p style=""font-size:28px;font-family:Cordia New""><b><i>Best Regards,</i></b></p>
+                    <p style=""font-size:28px;font-family:Cordia New""><b><i>Lunch Order Reserve (LOR)</i></b></p>
                 ");
 
                 mail.IsBodyHtml = true;

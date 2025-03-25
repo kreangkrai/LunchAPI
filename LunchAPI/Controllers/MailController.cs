@@ -131,7 +131,7 @@ namespace LunchAPI.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    return Ok(Mail.SendEmailApproveTopup(data.topup, data.amount, data.date));
+                    return Ok(Mail.SendEmailApproveTopup(data.topup, data.amount, data.balance, data.date));
                 }
                 else
                 {
